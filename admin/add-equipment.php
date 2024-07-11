@@ -11,7 +11,7 @@ if (strlen($_SESSION['sscmsaid'] == 0)) {
         $equipment = $_POST['equipment'];
         $rowCount = EquipmentController::getEquipmentByID($equipment)->rowCount();
         if ($rowCount == 0) {
-            $sql = "INSERT INTO `equipment` (`type`, `id`, `totalUsedTime`, `producedYear`, `description`, `currentRoom`) VALUES (?,?,?,?,?,?)";
+            $sql = "INSERT INTO `equipment` (`type`, `id`, `totalUsedTime`, `producedYear`, `description`, `currentRoom`,`usability`) VALUES (?,?,?,?,?,?,?)";
             $query = Query::execute(
                 $sql,
                 [
@@ -21,6 +21,7 @@ if (strlen($_SESSION['sscmsaid'] == 0)) {
                     $_POST['producedYear'],
                     $_POST['description'],
                     $_POST['currentRoom'],
+                    1
                 ]
             );
             if ($query->rowCount() > 0) {

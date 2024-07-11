@@ -8,36 +8,29 @@ if (strlen($_SESSION['sscmsaid'] == 0)) {
     header('location:logout.php');
 } else {
     if (isset($_POST['submit'])) {
-        $equipment = $_POST['equipment'];
-        $rowCount = EquipmentController::getEquipmentByID($equipment)->rowCount();
-        if ($rowCount == 0) {
-            $sql = "INSERT INTO equipment VALUES (id, occupiedTime, occupiedDay, equipmentID)";
-            $query = Query::execute(
-                $sql,
-                [
-                    $_POST['occupiedTime'],
-                    $_POST['occupiedDay'],
-                    $_POST['equipmentID'],
-                ]
-            );
-            if ($query->rowCount() > 0) {
-                Notification::echoToScreen('Equipment added successfully');
-                echo "<script>window.location.href = 'manage-equipments.php'</script>";
-            } else {
-                Notification::echoToScreen('Failed to add equipment');
-            }
+        $equipID = $_POST['equipID'];
+        $query = Query::execute(
+            "INSERT INTO equipschedule (occupiedTime, occupiedDay, equipmentID) VALUES (?,?,?)",
+            [
+                $_POST['occupiedTime'],
+                $_POST['occupiedDay'],
+                $_POST['equipID']
+            ]
+        );
+        if ($query->rowCount() > 0) {
+            Notification::echoToScreen("Equipment schedule is added successfully");
         } else {
-            Notification::echoToScreen("Equipment " . $equipment . " existed! Cannot add equipment!");
-            echo "<script>window.location.href = 'manage-equipments.php'</script>";
+            Notification::echoToScreen("Failed to add equipment schedule");
         }
+        
+        echo "<script>window.location.href = 'manage-equips-schedule.php'</script>";
     }
 ?>
-
     <!doctype html>
     <html lang="en">
 
     <head>
-        <title>CIMS | Add Equipment Schedule</title>
+        <title>CIMS | Add equipment Schedule</title>
         <link href="assets/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
         <link href="assets/css/style.css" rel="stylesheet" type="text/css" />
     </head>
@@ -64,19 +57,19 @@ if (strlen($_SESSION['sscmsaid'] == 0)) {
                                 <div class="form-group row">
                                     <label class="col-2 col-form-label">Occupied Day</label>
                                     <div class="col-10">
-                                    <input class="form-control" type="date" id="occupiedDate" name="occupiedDate" required>
+                                    <input class="form-control" type="date" id="occupiedDay" name="occupiedDay" required>
                                     </div>
                                 </div>
                                 <div class="form-group row">
-                                    <label class="col-2 col-form-label">Equipment ID</label>
+                                    <label class="col-2 col-form-label">equipment Name</label>
                                     <div class="col-10">
-                                        <input type="text" class="form-control" name="equipmentID" placeholder="Enter Equipment ID" required>
+                                        <input type="text" class="form-control" name="equipID" placeholder="Enter Equipment ID" required>
                                         <span id="equipment-availability-status"></span>
                                     </div>
                                 </div>
                                 <div class="form-group row">
                                     <div class="col-12 text-right">
-                                        <button type="submit" class="btn btn-primary waves-effect waves-light" name="submit">Add Equipment Schedule</button>
+                                        <button type="submit" class="btn btn-primary waves-effect waves-light" type="submit" name="submit">Add equipment Schedule</button>
                                     </div>
                                 </div>
                             </form>
@@ -95,23 +88,6 @@ if (strlen($_SESSION['sscmsaid'] == 0)) {
         <!-- App js -->
         <script src="assets/js/jquery.core.js"></script>
         <script src="assets/js/jquery.app.js"></script>
-        <script>
-            const userCheckbox = document.getElementById('userCheckbox');
-            const userTextbox = document.getElementById('userText');
-
-            userCheckbox.addEventListener('change', function() {
-                userTextbox.disabled = this.checked;
-                if (this.checked) userTextbox.value = '';
-            });
-
-            const roomCheckbox = document.getElementById('roomCheckbox');
-            const roomTextbox = document.getElementById('roomText');
-
-            roomCheckbox.addEventListener('change', function() {
-                roomTextbox.disabled = this.checked;
-                if (this.checked) roomTextbox.value = '';
-            });
-        </script>
     </body>
 
     </html>

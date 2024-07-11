@@ -8,9 +8,9 @@ if (strlen($_SESSION['sscmsaid'] == 0)) {
     header('location:logout.php');
 } else {
     if (isset($_POST['change'])) {
-        $adminid = $_SESSION['ifscaid'];
-        $cpassword = $_POST['currentpassword'];
-        $newpassword = ($_POST['newpassword']);
+        $userID = $_SESSION['sscmsaid'];
+        $cpassword = md5($_POST['currentpassword']);
+        $newpassword = md5($_POST['newpassword']);
         $query = Query::execute("SELECT * FROM tbluser WHERE schoolID=? and pass=?", [$_SESSION['sscmsaid'], $cpassword]);
         if ($query->rowCount() > 0) {
             Query::execute("UPDATE tbluser set pass=? where schoolID=?", [$newpassword, $_SESSION['sscmsaid']]);

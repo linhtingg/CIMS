@@ -8,27 +8,22 @@ if (strlen($_SESSION['sscmsaid'] == 0)) {
     header('location:logout.php');
 } else {
     if (isset($_POST['submit'])) {
-        $roomname = $_POST['roomname'];
-        if (RoomController::getRoomByID($roomname)->rowCount() == 0) {
-            $query = Query::execute(
-                "INSERT INTO room (id, occupiedTime, occupiedDay, roomID, avaiableTime) VALUES (?,?,?,?,?)",
-                [
-                    $roomname,
-                    $_POST['occupiedTime'],
-                    $_POST['occupiedDay'],
-                    $_POST['roomID'],
-                    $_POST['availableTimes']
-                ]
-            );
-            if ($query->rowCount() > 0) {
-                Notification::echoToScreen("Room added successfully");
-            } else {
-                Notification::echoToScreen("Failed to add room");
-            }
+        $roomID = $_POST['roomID'];
+        $query = Query::execute(
+            "INSERT INTO roomschedule (occupiedTime, occupiedDay, roomID) VALUES (?,?,?)",
+            [
+                $_POST['occupiedTime'],
+                $_POST['occupiedDay'],
+                $_POST['roomID']
+            ]
+        );
+        if ($query->rowCount() > 0) {
+            Notification::echoToScreen("Room schedule is added successfully");
         } else {
-            Notification::echoToScreen("Room " . $roomname . " existed! Cannot add room");
+            Notification::echoToScreen("Failed to add room schedule");
         }
-        echo "<script>window.location.href = 'manage-rooms.php'</script>";
+        
+        echo "<script>window.location.href = 'manage-rooms-schedule.php'</script>";
     }
 ?>
     <!doctype html>
@@ -62,13 +57,13 @@ if (strlen($_SESSION['sscmsaid'] == 0)) {
                                 <div class="form-group row">
                                     <label class="col-2 col-form-label">Occupied Day</label>
                                     <div class="col-10">
-                                    <input class="form-control" type="date" id="occupiedDate" name="occupiedDate" required>
+                                    <input class="form-control" type="date" id="occupiedDay" name="occupiedDay" required>
                                     </div>
                                 </div>
                                 <div class="form-group row">
                                     <label class="col-2 col-form-label">Room Name</label>
                                     <div class="col-10">
-                                        <input type="text" class="form-control" name="roomname" placeholder="Enter Room Name" required>
+                                        <input type="text" class="form-control" name="roomID" placeholder="Enter Room Name" required>
                                         <span id="room-availability-status"></span>
                                     </div>
                                 </div>
