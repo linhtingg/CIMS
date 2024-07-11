@@ -32,6 +32,11 @@ class EquipmentController
    private static $findEquipmentByID = "SELECT * FROM `equipment` WHERE id = ?";
    private static $allEquipmentType = "SELECT DISTINCT `type` FROM `equipment`";
 
+   public static function getAllEquipmentsQuery()
+   {
+      return EquipmentController::$allEquipmentsQuery;
+   }
+   
    /**
     * Return all equipments in database.
     */

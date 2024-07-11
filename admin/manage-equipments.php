@@ -33,6 +33,8 @@ if (strlen($_SESSION['sscmsaid'] == 0)) {
       <!-- Modernizr js -->
       <script src="assets/js/modernizr.min.js"></script>
 
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
    </head>
 
    <body>
@@ -43,6 +45,8 @@ if (strlen($_SESSION['sscmsaid'] == 0)) {
                <div class="col-12">
                   <div class="card-box">
                      <h4 class="m-t-0 header-title">Manage Equipments</h4>
+                     <button type="button" class="btn btn-outline-primary waves-effect waves-light" data-toggle="modal" data-target="#filterName" style="float: right;margin-bottom: 1em;margin-top: -2em;"><i class="fa fa-search"></i> Find equipment</button>
+                     <p></p>
                      <table id="datatable" class="table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
                         <thead>
                            <tr>
@@ -58,7 +62,13 @@ if (strlen($_SESSION['sscmsaid'] == 0)) {
                         </thead>
                         <tbody>
                            <?php
-                           $query = EquipmentController::getAllEquipments();
+                           $bindParams = [];
+                           $sql = EquipmentController::getAllEquipmentsQuery();
+                           if (isset($_GET['equipment'])) {
+                              $sql = $sql . " and id = ?";
+                              array_push($bindParams,  $_GET['equipment']);
+                           }
+                           $query = Query::execute($sql, $bindParams);
                            $results = $query->fetchAll(PDO::FETCH_OBJ);
                            $cnt = 1;
                            if ($query->rowCount() > 0) {
@@ -85,6 +95,28 @@ if (strlen($_SESSION['sscmsaid'] == 0)) {
             </div>
          </div>
       </div>
+
+      <form method="get">
+            <div id="filterName" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="myModalLabel">Find Equipment</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">X</button>
+                        </div>
+                        <div class="modal-body">
+                            <h5 class="font-16">Equipment</h5>
+                            <p><textarea class="form-control" placeholder="Equipment ID" required="true" name="equipment" required></textarea></p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-light waves-effect" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary waves-effect waves-light">Find</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+
       <!-- jQuery  -->
       <script src="assets/js/jquery.min.js"></script>
       <script src="assets/js/bootstrap.bundle.min.js"></script>

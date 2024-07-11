@@ -45,6 +45,8 @@ if (strlen($_SESSION['sscmsaid'] == 0)) {
         <!-- Modernizr js -->
         <script src="assets/js/modernizr.min.js"></script>
 
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
     </head>
 
     <body>
@@ -55,8 +57,8 @@ if (strlen($_SESSION['sscmsaid'] == 0)) {
                     <div class="col-12">
                         <div class="card-box">
                             <h4 class="m-t-0 header-title">Manage Rooms</h4>
-                            <button type="button" class="btn btn-outline-primary waves-effect waves-light" data-toggle="modal" data-target="#filterName">Find room by name </button>
-                            <button type="button" class="btn btn-outline-primary waves-effect waves-light" data-toggle="modal" data-target="#filterUsability">Filter by room's usability </button>
+                            <button type="button" class="btn btn-outline-primary waves-effect waves-light" data-toggle="modal" data-target="#filterName" style="float: right;margin-bottom: 1em;margin-top: -2em;margin-left: 10px;"><i class="fa fa-search"></i> Find room</button>
+                            <button type="button" class="btn btn-outline-primary waves-effect waves-light" data-toggle="modal" data-target="#filterUsability" style="float: right;margin-bottom: 1em;margin-top: -2em;margin-left: 10px;">Filter by room's usability </button>
                             <p></p>
                             <table id="datatable" class="table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
                                 <thead>
@@ -114,7 +116,7 @@ if (strlen($_SESSION['sscmsaid'] == 0)) {
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title" id="myModalLabel">Filter Room</h5>
+                            <h5 class="modal-title" id="myModalLabel">Find Room</h5>
                             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">X</button>
                         </div>
                         <div class="modal-body">
@@ -123,7 +125,7 @@ if (strlen($_SESSION['sscmsaid'] == 0)) {
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-light waves-effect" data-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-primary waves-effect waves-light">Filter</button>
+                            <button type="submit" class="btn btn-primary waves-effect waves-light">Find</button>
                         </div>
                     </div>
                 </div>
