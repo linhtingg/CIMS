@@ -9,10 +9,18 @@ if (strlen($_SESSION['sscmsaid'] == 0)) {
 } else {
     if (isset($_POST['submit'])) {
         Query::execute(
-            "UPDATE equipmentregisterform SET appove='1', reply = ? where formid=?",
+            "UPDATE equipmentregisterform SET reply = ?,approved=1 where formid=?",
             [
                 $_POST['equipmentID'],
                 intval($_GET['formID']),
+            ]
+        );
+        Query::execute(
+            "INSERT INTO equipschedule (occupiedTime,occupiedDay,equipmentID) VALUES (?,?,?)",
+            [
+                $_POST['borrowTime'],
+                $_POST['borrowDay'],
+                $_POST['equipmentID']
             ]
         );
         Notification::echoToScreen("Equipment has been assigned.");
@@ -67,9 +75,11 @@ if (strlen($_SESSION['sscmsaid'] == 0)) {
                                         </tr>
                                         <tr>
                                             <th>Borrow time</th>
-                                            <td><?php echo htmlentities($row->borrowTime); ?></td>
+                                            <td><?php $borrowTime = $row->borrowTime;
+                                                echo htmlentities($row->borrowTime); ?></td>
                                             <th>Borrow day</th>
-                                            <td><?php echo htmlentities($row->borrowDay); ?></td>
+                                            <td><?php $borrowDay = $row->borrowDay;
+                                                echo htmlentities($row->borrowDay); ?></td>
                                         </tr>
                                         <tr>
                                             <th>Purpose</th>
@@ -98,14 +108,14 @@ if (strlen($_SESSION['sscmsaid'] == 0)) {
                             <p><select class="form-control" name="equipmentID" required>
                                     <option value="">Select</option>
                                     <?php
-                                    $results = EquipmentController::getAllAvailableEquipments()->fetchAll(PDO::FETCH_OBJ);
+                                    $results = Query::execute("SELECT e.id FROM equipment e LEFT JOIN equipschedule es ON e.id=es.equipmentID AND es.occupiedTime=? AND es.occupiedDay=? where es.id is NULL and usability=1", [$borrowTime, $borrowDay])->fetchAll(PDO::FETCH_OBJ);
                                     foreach ($results as $row) { ?>
                                         <option value="<?php echo htmlentities($row->id); ?>"><?php echo htmlentities($row->id); ?></option>
                                     <?php } ?>
                                 </select>
                             </p>
-                            <h5 class="font-16">Remark</h5>
-                            <p><textarea class="form-control" placeholder="Remark" required="true" name="remark" required></textarea></p>
+                            <input type="hidden" class="form-control" name="borrowTime" value="<?php echo htmlentities($borrowTime); ?>">
+                            <input type="hidden" class="form-control" name="borrowDay" value="<?php echo htmlentities($borrowDay); ?>">
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-light waves-effect" data-dismiss="modal">Close</button>

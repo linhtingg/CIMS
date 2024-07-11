@@ -23,13 +23,12 @@ if (strlen($_SESSION['sscmsaid'] == 0)) {
                     if ($rowCount == 0 || $oldRoomID == $roomname) {
                         // IF NOT, UPDATE
                         Query::execute(
-                            "UPDATE room SET id =?, capacity=?, usability=?, description=?, avaiableTime=? WHERE id=?",
+                            "UPDATE room SET id =?, capacity=?, usability=?, description=? WHERE id=?",
                             [
                                 $roomname,
                                 $_POST['capacity'],
                                 $_POST['usability'],
                                 $_POST['description'],
-                                $_POST['times'],
                                 $oldRoomID
                             ]
                         );
@@ -104,16 +103,6 @@ if (strlen($_SESSION['sscmsaid'] == 0)) {
                                         <label class="col-2 col-form-label">Description</label>
                                         <div class="col-10">
                                             <textarea class="form-control" name="description" required="true"><?php echo htmlentities($row->description); ?></textarea>
-                                        </div>
-                                    </div>
-                                    <div class="form-group row">
-                                        <label class="col-2 col-form-label">Available Time</label>
-                                        <div class="col-10">
-                                            <select class="form-control" name="times" required>
-                                                <option>Morning</option>
-                                                <option>Afternoon</option>
-                                                <option>Evening</option>
-                                            </select>
                                         </div>
                                     </div>
                                     <div class="form-group row">

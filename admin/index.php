@@ -4,12 +4,14 @@ error_reporting(0);
 foreach (glob("../helper/*.php") as $file) {
     include $file;
 }
+
+$password = md5 ($_POST['password']);
 if (isset($_POST['login'])) {
     $query = Query::execute(
         "SELECT * FROM tbladmin WHERE email=? AND password=?",
         [
             $_POST['username'],
-            $_POST['password']
+            $password
         ]
     );
     $results = $query->fetchAll(PDO::FETCH_OBJ);
@@ -78,11 +80,6 @@ if (isset($_POST['login'])) {
                             </div>
                         </div>
 
-                        <div class="form-group row m-t-30 mb-0">
-                            <div class="col-12">
-                                <a href="forgot-password.php" class="text-muted"><i class="fa fa-lock m-r-5"></i> Forgot your password?</a>
-                            </div>
-                        </div>
                     </form>
                 </div>
             </div>

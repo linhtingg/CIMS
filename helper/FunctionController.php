@@ -30,6 +30,7 @@ class EquipmentController
    private static $allEquipmentsQuery = "SELECT * from equipment where id!='1'";
    private static $allAvailableEquipmentsQuery = "SELECT * from equipment where id!='1' and usability=1";
    private static $findEquipmentByID = "SELECT * FROM `equipment` WHERE id = ?";
+   private static $allEquipmentType = "SELECT DISTINCT `type` FROM `equipment`";
 
    /**
     * Return all equipments in database.
@@ -38,6 +39,14 @@ class EquipmentController
    {
       return Query::execute(EquipmentController::$allEquipmentsQuery);
    }
+
+   /**
+    * Return all type of equipments in database.
+    */
+    public static function getAllTypeEquipments(): PDOStatement
+    {
+       return Query::execute(EquipmentController::$allEquipmentType);
+    }
 
    /**
     * Return all available equipments
@@ -54,4 +63,26 @@ class EquipmentController
    {
       return Query::execute(EquipmentController::$findEquipmentByID, [$equipmentID]);
    }
+}
+
+class UserController
+{
+   private static $allUserIDQuery = "SELECT SchoolID from tbluser ";
+   private static $getUserIDQuery = "SELECT * from tbluser where SchoolID= ?";
+   
+   /**
+    * Return all IDs of users in database.
+    */
+    public static function getAllUID(): PDOStatement
+    {
+       return Query::execute(UserController::$allUserIDQuery);
+    }
+
+    /**
+    * Find specific ID of user in database.
+    */
+    public static function getUserID(string $userID) : PDOStatement
+    {
+       return Query::execute(UserController::$getUserIDQuery,[$userID]);
+    }
 }

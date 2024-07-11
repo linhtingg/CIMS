@@ -47,14 +47,12 @@ if (strlen($_SESSION['sscmsaid'] == 0)) {
                         <thead>
                            <tr>
                               <th>#</th>
-                              <th>Equipment Type</th>
+                              <th>Type</th>
                               <th>Equipment</th>
-                              <th>Total Used Time</th>
                               <th>Produced Year</th>
                               <th>Description</th>
                               <th>Last User Used</th>
                               <th>Current Room</th>
-                              <th>Avaiable Time </th>
                               <th>Action</th>
                            </tr>
                         </thead>
@@ -69,12 +67,10 @@ if (strlen($_SESSION['sscmsaid'] == 0)) {
                                     <td><?php echo htmlentities($cnt); ?></td>
                                     <td><?php echo htmlentities($row->type); ?></td>
                                     <td><?php echo htmlentities($row->id); ?></td>
-                                    <td><?php echo htmlentities($row->totalUsedTime); ?></td>
                                     <td><?php echo htmlentities($row->producedYear); ?></td>
                                     <td><?php echo htmlentities($row->description); ?></td>
                                     <td><?php echo htmlentities($row->lastUserUsed); ?></td>
                                     <td><?php echo htmlentities($row->currentRoom); ?></td>
-                                    <td><?php echo htmlentities($row->avaiableTime); ?></td>
                                     <td>
                                        <a href="edit-equipment.php?did=<?php echo htmlentities($row->id); ?>" class="btn btn-primary">Edit </a> | <a href="manage-equipments.php?delid=<?php echo ($row->id); ?>" onclick="return confirm('Do you really want to Delete ?');" class="btn btn-danger btn-xs">Delete</i></a>
                                     </td>

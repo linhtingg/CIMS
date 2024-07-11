@@ -9,11 +9,20 @@ if (strlen($_SESSION['sscmsaid'] == 0)) {
 } else {
     // Assign Room Code   
     if (isset($_POST['submit'])) {
-        $query = Query::execute(
-            "UPDATE roomregisterform SET  reply = ? where formid=?",
+        Query::execute(
+            "UPDATE roomregisterform SET reply = ?,approved=1 where formid=?",
             [
                 $_POST['roomID'],
                 intval($_GET['stdid'])
+            ]
+        );
+        // TODO: INSERT INTO roomschedule
+        Query::execute(
+            "INSERT INTO equipschedule (occupiedTime,occupiedDay,roomID) VALUES (?,?,?)",
+            [
+                $_POST['borrowTime'],
+                $_POST['borrowDay'],
+                $_POST['roomID'],
             ]
         );
         Notification::echoToScreen("Room has been assigned");
@@ -68,9 +77,11 @@ if (strlen($_SESSION['sscmsaid'] == 0)) {
                                         </tr>
                                         <tr>
                                             <th>Borrow time</th>
-                                            <td><?php echo htmlentities($row->borrowTime); ?></td>
+                                            <td><?php $borrowTime = $row->borrowTime;
+                                                echo htmlentities($row->borrowTime); ?></td>
                                             <th>Borrow day</th>
-                                            <td><?php echo htmlentities($row->borrowDay); ?></td>
+                                            <td><?php $borrowDay = $row->borrowDay;
+                                                echo htmlentities($row->borrowDay); ?></td>
                                         </tr>
                                         <tr>
                                             <th>Purpose</th>
@@ -99,16 +110,17 @@ if (strlen($_SESSION['sscmsaid'] == 0)) {
                             <p><select class="form-control" name="roomID" required>
                                     <option value="">Select</option>
                                     <?php
-                                    $sql = "SELECT * from room where usability=1 and capacity>?";
-                                    $query = Query::execute($sql, [$row->numberOfPeople]);
+                                    // $sql = "SELECT * from room where usability=1 and capacity>?";
+                                    $sql = "SELECT room.id FROM room LEFT JOIN roomschedule rs ON room.id=rs.roomID AND rs.occupiedTime=? AND rs.occupiedDay=? where rs.id is NULL and usability=1 and capacity>?";
+                                    $query = Query::execute($sql, [$borrowTime, $borrowDay, $row->numberOfPeople]);
                                     $results = $query->fetchAll(PDO::FETCH_OBJ);
                                     foreach ($results as $row) { ?>
                                         <option value="<?php echo htmlentities($row->id); ?>"><?php echo htmlentities($row->id); ?></option>
                                     <?php } ?>
                                 </select>
                             </p>
-                            <h5 class="font-16">Remark</h5>
-                            <p><textarea class="form-control" placeholder="Remark" required="true" name="remark" required></textarea></p>
+                            <input type="hidden" class="form-control" name="borrowTime" value="<?php echo htmlentities($borrowTime); ?>">
+                            <input type="hidden" class="form-control" name="borrowDay" value="<?php echo htmlentities($borrowDay); ?>">
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-light waves-effect" data-dismiss="modal">Close</button>

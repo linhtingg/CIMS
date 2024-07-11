@@ -4,12 +4,15 @@ error_reporting(0);
 foreach (glob("../helper/*.php") as $file) {
     include $file;
 }
+
+$password = md5 ($_POST['pass']);
+
 if (isset($_POST['login'])) {
     $query = Query::execute(
         "SELECT * FROM tbluser WHERE email=? and pass=?",
         [
             $_POST['email'],
-            $_POST['pass']
+            $password
         ]
     );
     $results = $query->fetchAll(PDO::FETCH_OBJ);
@@ -73,11 +76,7 @@ if (isset($_POST['login'])) {
                                 <button class="btn btn-success btn-block waves-effect waves-light" type="submit" name="login">Log In</button>
                             </div>
                         </div>
-                        <div class="form-group row m-t-30 mb-0">
-                            <div class="col-12">
-                                <a href="forgot-password.php" class="text-muted"><i class="fa fa-lock m-r-5"></i> Forgot your password?</a>
-                            </div>
-                        </div>
+                       
                     </form>
                 </div>
                 <div class="clearfix"></div>

@@ -77,7 +77,7 @@
                                 <ul>
                                     <li><a href="add-room.php">Add </a></li>
                                     <li><a href="manage-rooms.php">Manage </a></li>
-                                    <li><a href="manage-room-register-students.php">Browse Classroom Requests </a></li>
+                                    <li><a href="manage-room-register-students.php">Browse Requests </a></li>
                                 </ul>
                             </li>
 
@@ -85,32 +85,46 @@
                     </li>
                     <!---Equipments---->
                     <li class="has-submenu">
-                        <a href="#"><i class="zmdi zmdi-collection-text"></i> <span> Equipments </span> </a>
+                        <a href="#"><i class="zmdi zmdi-collection-text"></i> <span>Equipments</span> </a>
                         <ul class="submenu megamenus">
                             <li>
                                 <ul>
                                     <li><a href="add-equipment.php">Add </a></li>
                                     <li><a href="manage-equipments.php">Manage </a></li>
-                                    <li><a href="manage-equipment-register-students.php">Browse Equipment Requests </a></li>
+                                    <li><a href="manage-equipment-register-students.php">Browse Requests</a></li>
                                 </ul>
                             </li>
 
                         </ul>
                     </li>
 
-                    <li> <a href="report.php"><i class="zmdi zmdi-collection-text"></i> Report forms </a></li>
+                    <li> <a href="report.php"><i class="zmdi zmdi-collection-text"></i>View Reports</a></li>
                     <!-- Students -->
                     <li class="has-submenu">
-                        <a href="#"><i class="zmdi zmdi-collection-text"></i> <span> Students </span> </a>
+                        <a href="#"><i class="zmdi zmdi-collection-text"></i> <span>Manage Users</span> </a>
                         <ul class="submenu megamenu">
                             <li>
                                 <ul>
-                                    <li><a href="manage-students.php">Manage </a></li>
+                                    <li><a href="add-student.php">Add</a></li>
+                                    <li><a href="manage-students.php">Manage</a></li>
                                 </ul>
                             </li>
                         </ul>
                     </li>
-
+                    <!---Room Schedule---->
+                    <li class="has-submenu">
+                        <a href="#"><i class="zmdi zmdi-collection-text"></i> <span>Schedule </span> </a>
+                        <ul class="submenu megamenus">
+                            <li>
+                                <ul>
+                                    <li><a href="add-room-schedule.php">Add Room Schedule </a></li>
+                                    <li><a href="manage-rooms-schedule.php">Manage Room Schedule </a></li>
+                                    <li><a href="add-equip-schedule.php">Add Equipment Schedule</a></li>
+                                    <li><a href="manage-equips-schedule.php">Manage Equipment Schedule</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
                     <!---Noti---->
                     <li class="has-submenu">
                         <a href="#"><i class="zmdi zmdi-collection-text"></i> <span> Notification </span> </a>

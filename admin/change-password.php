@@ -12,14 +12,14 @@ if (strlen($_SESSION['sscmsaid'] == 0)) {
             "SELECT * FROM tbladmin WHERE schoolID=? and password=?",
             [
                 $_SESSION['sscmsaid'],
-                $_POST['currentpassword']
+                md5($_POST['currentpassword'])
             ]
         );
         if ($query->rowCount() > 0) {
             Query::execute(
                 "UPDATE tbladmin set password=? where schoolID=?",
                 [
-                    $_POST['newPass'],
+                    md5($_POST['newPass']),
                     $_SESSION['sscmsaid']
                 ]
             );

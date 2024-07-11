@@ -30,7 +30,7 @@ if (strlen($_SESSION['sscmsaid'] == 0)) {
                 <div class="row">
                     <div class="col-12">
                         <div class="card-box">
-                            <h3> Report forms </h3>
+                            <h3> View Reports </h3>
                             <hr />
                             <div class="card-body card-block">
                                 <table id="datatable" class="table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">

@@ -55,8 +55,8 @@ if (strlen($_SESSION['sscmsaid'] == 0)) {
                     <div class="col-12">
                         <div class="card-box">
                             <h4 class="m-t-0 header-title">Manage Rooms</h4>
-                            <button type="button" class="btn btn-primary waves-effect waves-light" data-toggle="modal" data-target="#filterName">Filter room name </button>
-                            <button type="button" class="btn btn-primary waves-effect waves-light" data-toggle="modal" data-target="#filterUsability">Filter room's usability </button>
+                            <button type="button" class="btn btn-outline-primary waves-effect waves-light" data-toggle="modal" data-target="#filterName">Find room by name </button>
+                            <button type="button" class="btn btn-outline-primary waves-effect waves-light" data-toggle="modal" data-target="#filterUsability">Filter by room's usability </button>
                             <p></p>
                             <table id="datatable" class="table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
                                 <thead>
@@ -66,7 +66,6 @@ if (strlen($_SESSION['sscmsaid'] == 0)) {
                                         <th>Capacity</th>
                                         <th>Status</th>
                                         <th>Description</th>
-                                        <th>Avaiable Time </th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
@@ -91,11 +90,11 @@ if (strlen($_SESSION['sscmsaid'] == 0)) {
                                                 <td><?php echo htmlentities($cnt); ?></td>
                                                 <td><?php echo htmlentities($row->id); ?></td>
                                                 <td><?php echo htmlentities($row->capacity); ?></td>
-                                                <td><?php $roomUsability = $row->usability;
-                                                    if ($roomUsability == 0) echo "Not Available";
-                                                    else echo "Available"; ?></td>
+                                                <td><?php $room_usability = $row->usability;
+                                                    if ($room_usability == 0) : echo "<span style='color:red'>Unusable</span>";
+                                                    else : echo "<span style='color:green'>Usable</span>";
+                                                    endif; ?></td>
                                                 <td><?php echo htmlentities($row->description); ?></td>
-                                                <td><?php echo htmlentities($row->avaiableTime); ?></td>
                                                 <td>
                                                     <a href="edit-room.php?did=<?php echo htmlentities($row->id); ?>" class="btn btn-primary">Edit </a> | <a href="manage-rooms.php?delid=<?php echo ($row->id); ?>" onclick="return confirm('Do you really want to Delete ?');" class="btn btn-danger btn-xs">Delete</i></a>
                                                 </td>

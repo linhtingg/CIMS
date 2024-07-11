@@ -8,34 +8,35 @@ if (strlen($_SESSION['sscmsaid'] == 0)) {
     header('location:logout.php');
 } else {
     if (isset($_POST['submit'])) {
-        $roomname = $_POST['roomname'];
-        if (RoomController::getRoomByID($roomname)->rowCount() == 0) {
+        $userID = $_POST['userID'];
+        if (UserController::getUserID($userID)->rowCount() == 0) {
             $query = Query::execute(
-                "INSERT INTO room (id, capacity, usability, description) VALUES (?,?,?,?)",
+                "INSERT INTO tbluser (`email`, `pass`, `isType`, `fullName`, `schoolID`) VALUES (?,?,?,?,?)",
                 [
-                    $roomname,
-                    $_POST['capacity'],
-                    $_POST['usability'],
-                    $_POST['description'],
+                    $_POST['email'],
+                    md5($userID),
+                    $_POST['isType'],
+                    $_POST['fullName'],
+                    $userID,
                 ]
             );
             if ($query->rowCount() > 0) {
-                Notification::echoToScreen("Room added successfully");
+                Notification::echoToScreen("User added successfully");
             } else {
-                Notification::echoToScreen("Failed to add room");
+                Notification::echoToScreen("Failed to add user");
             }
         } else {
-            Notification::echoToScreen("Room " . $roomname . " existed! Cannot add room");
-            echo "<script>window.location.href = 'add-room.php'</script>";
+            Notification::echoToScreen("User " . $userID . " existed! Cannot add user");
+            echo "<script>window.location.href = 'add-student.php'</script>";
         }
-        echo "<script>window.location.href = 'manage-rooms.php'</script>";
+        echo "<script>window.location.href = 'manage-students.php'</script>";
     }
 ?>
     <!doctype html>
     <html lang="en">
 
     <head>
-        <title>CIMS | Add Room</title>
+        <title>CIMS | Add User</title>
         <link href="assets/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
         <link href="assets/css/style.css" rel="stylesheet" type="text/css" />
     </head>
@@ -47,42 +48,38 @@ if (strlen($_SESSION['sscmsaid'] == 0)) {
                 <div class="row">
                     <div class="col-12">
                         <div class="card-box">
-                            <h4 class="m-t-0 header-title">Add Room</h4>
+                            <h4 class="m-t-0 header-title">Add User</h4>
                             <form method="post" enctype="multipart/form-data">
                                 <div class="form-group row">
-                                    <label class="col-2 col-form-label">Room Name</label>
+                                    <label class="col-2 col-form-label">User ID</label>
                                     <div class="col-10">
-                                        <input type="text" class="form-control" name="roomname" placeholder="Enter Room Name" required>
-                                        <span id="room-availability-status"></span>
+                                        <input type="text" class="form-control" name="userID" placeholder="Enter User's ID Number" required>
                                     </div>
                                 </div>
                                 <div class="form-group row">
-                                    <label class="col-2 col-form-label">Capacity</label>
+                                    <label class="col-2 col-form-label">Full Name</label>
                                     <div class="col-10">
-                                        <select class="form-control" name="capacity" required>
-                                            <option>50</option>
-                                            <option>150</option>
+                                        <input type="text" class="form-control" name="fullName" placeholder="Enter User's Full Name" required>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-2 col-form-label">Type</label>
+                                    <div class="col-10">
+                                        <select class="form-control" name="isType" required placeholder="Student or Lecturer">
+                                            <option value="Student">Student</option>
+                                            <option value="Lecturer">Lecturer</option>
                                         </select>
                                     </div>
                                 </div>
                                 <div class="form-group row">
-                                    <label class="col-2 col-form-label">Usability</label>
+                                    <label class="col-2 col-form-label">School Email</label>
                                     <div class="col-10">
-                                        <select class="form-control" name="usability" required>
-                                            <option value="1">Available</option>
-                                            <option value="0">Not Available</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <label class="col-2 col-form-label">Description</label>
-                                    <div class="col-10">
-                                        <textarea class="form-control" name="description" placeholder="Enter Room Description" required></textarea>
+                                        <input type="email" class="form-control" name="email" placeholder="Enter User's Email" required>
                                     </div>
                                 </div>
                                 <div class="form-group row">
                                     <div class="col-12 text-right">
-                                        <button type="submit" class="btn btn-primary waves-effect waves-light" type="submit" name="submit">Add Room</button>
+                                        <button type="submit" class="btn btn-primary waves-effect waves-light" type="submit" name="submit">Add User</button>
                                     </div>
                                 </div>
                             </form>

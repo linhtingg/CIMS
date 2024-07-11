@@ -12,7 +12,7 @@ if (strlen($_SESSION['sscmsaid'] == 0)) {
             $rowCount = EquipmentController::getEquipmentByID($_POST['equipmentID'])->rowCount();
             if ($rowCount == 0 || $_POST['equipmentID'] == $_GET['did']) {
                 Query::execute(
-                    "UPDATE equipment SET type=?, id=?, totalUsedTime=?, producedYear=?, description=?, lastUserUsed=?, currentRoom=?, avaiableTime=? WHERE id=?",
+                    "UPDATE equipment SET type=?, id=?, totalUsedTime=?, producedYear=?, description=?, lastUserUsed=?, currentRoom=? WHERE id=?",
                     [
                         $_POST['type'],
                         $_POST['equipmentID'],
@@ -21,7 +21,6 @@ if (strlen($_SESSION['sscmsaid'] == 0)) {
                         $_POST['description'],
                         $_POST['lastUserUsed'],
                         $_POST['currentRoom'],
-                        $_POST['availableTime'],
                         $_GET['did']
                     ]
                 );
@@ -70,15 +69,17 @@ if (strlen($_SESSION['sscmsaid'] == 0)) {
                                         </div>
                                     </div>
                                     <div class="form-group row">
-                                        <label class="col-2 col-form-label">Equipment Type</label>
+                                        <label class="col-2 col-form-label">Type</label>
                                         <div class="col-10">
-                                            <select class="form-control" name="type" required>
-                                                <option>Microphone</option>
-                                                <option>Oscilloscope</option>
-                                                <option>Biến áp</option>
-                                                <option>Bảng mạch</option>
-                                                <option>Đầu chuyển đổi</option>
-                                            </select>
+                                            <input type="text" class="form-control" list="type" required="true" name="type" value="<?php echo htmlentities($row->type); ?>"">
+                                            <datalist id="type">
+                                            <?php
+                                            $results = EquipmentController::getAllTypeEquipments()->fetchAll(PDO::FETCH_OBJ);
+                                            foreach ($results as $result) {
+                                                echo "<option value= $result->type </option>";
+                                            }
+                                            ?>
+                                            </datalist>
                                         </div>
                                     </div>
                                     <div class="form-group row">
@@ -102,23 +103,29 @@ if (strlen($_SESSION['sscmsaid'] == 0)) {
                                     <div class="form-group row">
                                         <label class="col-2 col-form-label">Last User Used</label>
                                         <div class="col-10">
-                                            <input type="text" class="form-control" name="lastUserUsed" value="<?php echo htmlentities($row->lastUserUsed); ?>" required="true">
+                                            <input type="text" class="form-control" list="lastUserUsed" name="lastUserUsed" value="<?php echo htmlentities($row->lastUserUsed); ?>"">
+                                            <datalist id="lastUserUsed">
+                                            <?php
+                                            $results = UserController::getAllUID()->fetchAll(PDO::FETCH_OBJ);
+                                            foreach ($results as $result) {
+                                                echo "<option value= $result->SchoolID </option>";
+                                            }
+                                            ?>
+                                            </datalist>
                                         </div>
                                     </div>
                                     <div class="form-group row">
                                         <label class="col-2 col-form-label">Current Room</label>
                                         <div class="col-10">
-                                            <input type="text" class="form-control" name="currentRoom" value="<?php echo htmlentities($row->currentRoom); ?>" required="true">
-                                        </div>
-                                    </div>
-                                    <div class="form-group row">
-                                        <label class="col-2 col-form-label">Available Time</label>
-                                        <div class="col-10">
-                                            <select class="form-control" name="availableTime" required>
-                                                <option>Morning</option>
-                                                <option>Afternoon</option>
-                                                <option>Evening</option>
-                                            </select>
+                                            <input type="text" class="form-control" list="room_id" name="currentRoom" value="<?php echo htmlentities($row->currentRoom); ?>" placeholder="Enter Current Room" >
+                                            <datalist id="room_id">
+                                                <?php
+                                                $results = RoomController::getAllRooms()->fetchAll(PDO::FETCH_OBJ);
+                                                foreach ($results as $result) {
+                                                    echo "<option value= $result->id </option>";
+                                                }
+                                                ?>
+                                            </datalist>
                                         </div>
                                     </div>
                                     <div class="form-group row">

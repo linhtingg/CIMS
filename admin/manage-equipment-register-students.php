@@ -7,9 +7,9 @@ foreach (glob("../helper/*.php") as $file) {
 if (strlen($_SESSION['sscmsaid'] == 0)) {
    header('location:logout.php');
 } else {
-   // Code for deleting form details
+   // Code for deleting student details
    if (isset($_GET['rejectForm'])) {
-      Query::execute("UPDATE equipmentregisterform SET reply='1', approve='0' where formid=?", [intval($_GET['rejectForm'])]);
+      Query::execute("UPDATE equipmentregisterform SET approved=0 where formid=?", [intval($_GET['rejectForm'])]);
       Notification::echoToScreen("Form rejected");
       echo "<script>window.location.href = 'manage-equipment-register-students.php'</script>";
    }
@@ -54,7 +54,7 @@ if (strlen($_SESSION['sscmsaid'] == 0)) {
                         </thead>
                         <tbody>
                            <?php
-                           $query = Query::execute("SELECT * from equipmentregisterform where reply is null");
+                           $query = Query::execute("SELECT * from equipmentregisterform where approved is NULL");
                            $results = $query->fetchAll(PDO::FETCH_OBJ);
                            if ($query->rowCount() > 0) {
                               foreach ($results as $row) { ?>

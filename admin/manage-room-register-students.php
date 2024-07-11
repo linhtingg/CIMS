@@ -8,7 +8,7 @@ if (strlen($_SESSION['sscmsaid'] == 0)) {
     header('location:logout.php');
 } else {
     if (isset($_GET['rejectForm'])) {
-        Query::execute("UPDATE roomregisterform SET reply='1' where formid=?", [intval($_GET['rejectForm'])]);
+        Query::execute("UPDATE roomregisterform SET approved=0 where formid=?", [intval($_GET['rejectForm'])]);
         Notification::echoToScreen("Form rejected");
         echo "<script>window.location.href = 'manage-room-register-students.php'</script>";
     }
@@ -46,7 +46,7 @@ if (strlen($_SESSION['sscmsaid'] == 0)) {
                                 </thead>
                                 <tbody>
                                     <?php
-                                    $query = Query::execute("SELECT * from roomregisterform where reply is NULL");
+                                    $query = Query::execute("SELECT * from roomregisterform where approved is NULL");
                                     $results = $query->fetchAll(PDO::FETCH_OBJ);
                                     if ($query->rowCount() > 0) {
                                         foreach ($results as $row) { ?>

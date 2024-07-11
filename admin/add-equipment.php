@@ -11,18 +11,16 @@ if (strlen($_SESSION['sscmsaid'] == 0)) {
         $equipment = $_POST['equipment'];
         $rowCount = EquipmentController::getEquipmentByID($equipment)->rowCount();
         if ($rowCount == 0) {
-            $sql = "INSERT INTO equipment VALUES (?,?,?,?,?,?,?,?,1)";
+            $sql = "INSERT INTO `equipment` (`type`, `id`, `totalUsedTime`, `producedYear`, `description`, `currentRoom`) VALUES (?,?,?,?,?,?)";
             $query = Query::execute(
                 $sql,
                 [
-                    $_POST['type'],
+                    $_POST['equipType'],
                     $equipment,
                     $_POST['totalUsedTime'],
                     $_POST['producedYear'],
                     $_POST['description'],
-                    $_POST['lastUserUsed'],
                     $_POST['currentRoom'],
-                    $_POST['avaiableTimes']
                 ]
             );
             if ($query->rowCount() > 0) {
@@ -30,10 +28,11 @@ if (strlen($_SESSION['sscmsaid'] == 0)) {
                 echo "<script>window.location.href = 'manage-equipments.php'</script>";
             } else {
                 Notification::echoToScreen('Failed to add equipment');
+                echo "<script>window.location.href = 'add-equipment.php'</script>";
             }
         } else {
             Notification::echoToScreen("Equipment " . $equipment . " existed! Cannot add equipment!");
-            echo "<script>window.location.href = 'manage-equipments.php'</script>";
+            echo "<script>window.location.href = 'add-equipment.php'</script>";
         }
     }
 ?>
@@ -57,28 +56,29 @@ if (strlen($_SESSION['sscmsaid'] == 0)) {
                             <h4 class="m-t-0 header-title">Add Equipment</h4>
                             <form method="post" enctype="multipart/form-data">
                                 <div class="form-group row">
-                                    <label class="col-2 col-form-label">Equipment</label>
+                                    <label class="col-2 col-form-label">Equipment ID</label>
                                     <div class="col-10">
-                                        <input type="text" class="form-control" name="equipment" placeholder="Enter Equipment Name" required>
-                                        <span id="equipment-availability-status"></span>
+                                        <input type="text" class="form-control" name="equipment" placeholder="Enter Equipment ID" required>
                                     </div>
                                 </div>
                                 <div class="form-group row">
-                                    <label class="col-2 col-form-label">Type</label>
+                                    <label class="col-2 col-form-label">Equipment Type</label>
                                     <div class="col-10">
-                                        <select class="form-control" name="type" required>
-                                            <option>Microphone</option>
-                                            <option>Oscilloscope</option>
-                                            <option>Biến áp</option>
-                                            <option>Bảng mạch</option>
-                                            <option>Đầu chuyển đổi</option>
-                                        </select>
+                                        <input type="text" class="form-control" list="equipType" required name="equipType" placeholder="Equipment type" >
+                                            <datalist id="equipType">
+                                                <?php
+                                                $results = EquipmentController::getAllTypeEquipments()->fetchAll(PDO::FETCH_OBJ);
+                                                foreach ($results as $result) {
+                                                    echo "<option value= '$result->type'> </option>";
+                                                }
+                                                ?>
+                                        </datalist>
                                     </div>
                                 </div>
                                 <div class="form-group row">
                                     <label class="col-2 col-form-label">Total Used Time</label>
                                     <div class="col-10">
-                                        <input type="text" class="form-control" name="totalUsedTime" placeholder="Enter Total Used Time" required>
+                                        <input type="text" class="form-control" name="totalUsedTime" placeholder="Enter Total Used Time">
                                     </div>
                                 </div>
                                 <div class="form-group row">
@@ -90,29 +90,21 @@ if (strlen($_SESSION['sscmsaid'] == 0)) {
                                 <div class="form-group row">
                                     <label class="col-2 col-form-label">Description</label>
                                     <div class="col-10">
-                                        <textarea class="form-control" name="description" placeholder="Enter Equipment Description" required></textarea>
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <label class="col-2 col-form-label">Last User Used</label>
-                                    <div class="col-10">
-                                        <input type="text" class="form-control" name="lastUserUsed" placeholder="Enter Last User Used" required>
+                                        <textarea class="form-control" name="description" placeholder="Enter Equipment Description"></textarea>
                                     </div>
                                 </div>
                                 <div class="form-group row">
                                     <label class="col-2 col-form-label">Current Room</label>
                                     <div class="col-10">
-                                        <input type="text" class="form-control" name="currentRoom" placeholder="Enter Current Room" required>
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <label class="col-2 col-form-label">Avaiable Time</label>
-                                    <div class="col-10">
-                                        <select class="form-control" name="avaiableTimes" multiple required>
-                                            <option value="Morning">Morning</option>
-                                            <option value="Afternoon">Afternoon</option>
-                                            <option value="Evening">Evening</option>
-                                        </select>
+                                        <input type="text" class="form-control" list="currentRoom" name="currentRoom" placeholder="Enter Current Room">
+                                        <datalist id="currentRoom">
+                                            <?php
+                                            $results = RoomController::getAllRooms()->fetchAll(PDO::FETCH_OBJ);
+                                            foreach ($results as $result) {
+                                                echo "<option value= '$result->id'> </option>";
+                                            }
+                                            ?>
+                                        </datalist>
                                     </div>
                                 </div>
                                 <div class="form-group row">
